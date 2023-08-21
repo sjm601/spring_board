@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+	<th:block th:replace="~{/layout/layoutV1 :: setContent(~{this :: content})}">
+	<th:block th:fragment="content">
+	<!-- Page Content -->
+      <div class="container-fluid">
+      <div class="container-fluid form-inline">
+        <h2 class="mt-4" th:text="${board.title}+ ' 목록'">자유게시판 목록   </h2>
+           <a th:href="@{/board/{id}/register(id=${board.boardId})}" href="#">
+              <button type="button" class="btn btn-success mt-4">게시글 쓰기</button>
+            </a>
+  		
+     </div>
+
+        <hr>
+
+        <form action="#" method="get" id="searchForm">
+          <div class="input-group">
+            <input type="hidden" name="page" value="1">
+            <div class="input-group-prepend">
+              <select class="custom-select" name="type">
+                <option selected>----- 검색유형 -----</option>
+                <option>제목</option>
+                <option>내용</option>
+                <option>작성자</option>
+                <option>제목 + 내용</option>
+                <option>제목 + 내용 + 작성자</option>
+              </select>
+            </div>
+            <input type="search" class="form-control" name="value">
+            <div class="input-group-append" id="button-addon4">
+              <button class="btn btn-success btn-search" type="button">검색</button>
+            </div>
+          </div>
+        </form>
+
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">번호</th>
+              <th scope="col">제목</th>
+              <th scope="col">작성자</th>
+              <th scope="col">조회수</th>
+              <th scope="col">등록일자</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr th:each="article : ${articleList}">
+            <td th:text="${article.articleId}">번호</td>
+            <td>
+    <a th:text="${article.subject}" th:href="@{/board/{id}/read/{articleId}(id=${board.boardId},articleId=${article.articleId})}">제목</a>
+			</td>
+            <td th:text="${article.writer}">작성자</td>
+            <td th:text="${article.hitCount}">조회수</td>
+            <td th:text="${article.regdate}">등록일자</td>
+            </tr>
+          </tbody>
+
+        </table>
+
+        <ul class="pagination h-100 justify-content-center align-items-center">
+
+          <li class="page-item"><a th:if="${pagination.showFirst}" th:href="@{?page=1}" class="page-link">처음으로</a></li>
+          <li class="page-item"><a th:if="${pagination.showPrevious}" th:href="@{|?page=${pagination.previousStartPage}|}" class="page-link">이전목록</a></li>
+		<th:block th:each="i : ${#numbers.sequence(pagination.getStartPage(), pagination.getEndPage())}">
+          <li th:if="${i == pagination.params.requestPage}" class="page-item active"><a th:text="${i}" class="page-link" href="#">1</a></li>
+          <li th:unless="${i ==pagination.params.requestPage}" class="page-item"><a th:href="@{|?page=${i}|}" th:text="${i}" class="page-link" href="#">2</a></li>
+		</th:block>
+          <li class="page-item"><a th:if="${pagination.showNext}" th:href="@{|?page=${pagination.nextStartPage}|}"class="page-link">다음목록</a></li>
+          <li class="page-item"><a th:if="${pagination.showLast}" th:href="@{|?page=${pagination.totalPages}|}" class="page-link">끝으로</a></li>
+        </ul>
+      </div>
+	</th:block>
+</th:block>
+</html>

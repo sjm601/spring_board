@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>회원 상세</title>
+</head>
+<body>
+	<h2>회원 상세</h2>
+	<table border="1">
+		<tr>
+			<td th:text="${member.id}">아이디</td>
+			<td th:text="${member.name}">이름</td>
+			<td th:text="${member.email}">이메일</td>
+			<td th:text="${member.regdate}">가입일자</td>
+		</tr>
+	</table>
+</body>
+</html>
