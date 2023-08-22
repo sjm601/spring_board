@@ -16,6 +16,8 @@ import com.ezen.springmvc.domain.common.web.PageParams;
 public interface ArticleService {
 	public void register(ArticleDTO ariArticleDTO);
 
+	public ArticleDTO find(int articleId);
+	
 	public int getCountAll(@Param("boardId") int boardId, @Param("keyword") String keyword);
 
 	public List<ArticleDTO> findByAll(PageParams pageParams);
@@ -24,16 +26,15 @@ public interface ArticleService {
 
 	public void updateOrderNo(ArticleDTO articleDTO);
 
-	public void createReply(@Param("articleDTO") ArticleDTO articleDTO, @Param("topArticleId") int articleId);
+	public void createReply(@Param("articleDTO")ArticleDTO articleDTO, @Param("topArticle")ArticleDTO topArticle);
 
-	public void createNestedReply(@Param("articleDTO") ArticleDTO articleDTO, @Param("topArticleId") int articleId);
+	public void createNestedReply(@Param("articleDTO") ArticleDTO articleDTO, @Param("topArticle")ArticleDTO topArticle);
 
 	public void updateHitCount(int articleId);
 
 	public ArticleDTO readArticle(int articleId);
 
-	public void update(@Param("articleDTO") ArticleDTO articleDTO, @Param("updateArticleId") int updateArticleId);
+	public void update(ArticleDTO articleDto);
 
-	public void delete(@Param("deleteArticleId") int deleteArticleId, @Param("loginId") String loginId,
-			@Param("passwd") String passwd);
+	public void delete(int deleteArticleId);
 }

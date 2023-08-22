@@ -28,16 +28,17 @@
           <label>등록일자</label>
           <input type="text" class="form-control"  th:value="${article.regdate}" name="regDate" value="2023-05-05" readonly>
         </div>
-
-      	<a th:href="@{/board/{id}/modify/{articleId}(id=${board.boardId}, articleId=${article.articleId})}">
+		<div class="form-group">
+      	<a th:href="@{/article/{id}/modify/{articleId}(id=${board.boardId}, articleId=${article.articleId})}">
    		 <button type="button" class="btn btn-primary">수정</button>
 		</a>
 
         <a href="#">
           <button type="button" class="btn btn-info">목록</button>
         </a>
-      </div>
-      
+		<a th:href="@{/article/{id}/reply/{articleId}(id=${board.boardId}, articleId=${article.articleId})}" href="#" class="btn btn-danger">답글 작성</a>
+	</div>
+	</div>
   	</th:block>
 </th:block>
 

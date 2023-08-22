@@ -28,6 +28,26 @@
 			#{levelNo},
 			#{orderNo})
 	</insert>
+	
+	<!-- 게시글 찾기 -->
+	<select id="find" parameterType="int" resultType="ArticleDTO">
+		SELECT
+			article_id,
+			board_id,
+			writer,
+			regdate,
+			subject,
+			content,
+			passwd,
+			group_no,
+			level_no,
+			order_no
+		FROM
+			article
+		WHERE
+			article_id = #{articleId}
+	</select>
+	
 
 	<!-- 페이징 계산(검색값 포함)에 필요한 게시글 전체 갯수 -->
 	<select id="getCountAll" parameterType="object" resultType="int" >
@@ -37,7 +57,7 @@
     		article
 		<where>
         	board_id = #{boardId}
-    		<if test="keyword != null">AND writer = '%' || #{keyword} || '%'</if>
+    		<if test="keyword != null">AND writer LIKE '%' || #{keyword} || '%'</if>
     		<if test="keyword != null">OR subject LIKE '%' || #{keyword} || '%'</if>
     		<if test="keyword != null">OR content LIKE '%' || #{keyword} || '%'</if>
     	</where>
@@ -46,26 +66,35 @@
 	<!-- 페이지당 보여지는 목록 갯수(검색값 포함)에 따른 게시글 목록 -->
 	<select id="findByAll" parameterType="PageParams" resultType="ArticleDTO">
 		SELECT
-			article_id,
+			articleId,
 			subject,
             writer,
             regdate,
-            hitcount
+            hitcount,
+            group_no,
+			level_no,
+			order_no
 		FROM (
 			SELECT
+				articleId,
 				CEIL(rownum / #{elementSize}) request_page,
-				article_id,
 				subject,
 				writer,
 				TO_CHAR(regdate, 'YYYY-MM-DD HH24:MI') regdate,
-				hitcount
+				hitcount,
+				group_no,
+				level_no,
+				order_no
              FROM (
              	SELECT 
-             		article_id,
+             		article_id articleId,
              		subject,
              		writer,
              		regdate,
-             		hitcount
+             		hitcount,
+             		group_no,
+					level_no,
+					order_no
                 FROM   
                 	article
 				<where>
@@ -128,14 +157,14 @@
 			#{articleDTO.subject},
 			#{articleDTO.content},
 			#{articleDTO.passwd},
-			#{articleDTO.groupNo},
-			#{articleDTO.levelNo} + 1,
+			#{topArticle.groupNo},
+			#{topArticle.levelNo} + 1,
 			(SELECT 
 				order_no + 1
              FROM
              	article
              WHERE
-             	article_id = #{topArticleId}))
+             	article_id = #{topArticle.articleId}))
 	</insert>
 	
 	<!-- 대댓글 등록 -->
@@ -184,6 +213,7 @@
 			article_id,
 			board_id,
 			writer,
+			passwd,
 			subject,
 			content,
 			regdate,
@@ -195,28 +225,24 @@
 	</select>
 	
 	<!-- 게시글 업데이트 -->
-	<update id="update" parameterType="object">
+	<update id="update" parameterType="ArticleDTO">
 		UPDATE
 			article
 		<set>
-	        <if test="articleDTO.boardId != 0">board_id = #{articleDTO.boardId},</if>
-	        <if test="articleDTO.subject != null">subject = #{articleDTO.subject},</if>
-	        <if test="articleDTO.content != null">content = #{articleDTO.content},</if>
-	        <if test="articleDTO.passwd != null">passwd = #{articleDTO.passwd},</if>
+	        <if test="subject != null">subject = #{subject},</if>
+	        <if test="content != null">content = #{content},</if>
 	        regdate = sysdate
 	    </set>
 		WHERE
-			article_id = #{updateArticleId}
+			article_id = #{articleId}
 	</update>
 	
 	<!-- 게시글 삭제 -->
-	<delete id="delete" parameterType="object">
+	<delete id="delete" parameterType="int">
 		DELETE
 		FROM
 			article
 		WHERE
-			article_id = #{deleteArticleId} AND
-			writer = #{loginId} AND
-			passwd = #{passwd}
+			article_id = #{deleteArticleId}
 	</delete>
 </mapper>

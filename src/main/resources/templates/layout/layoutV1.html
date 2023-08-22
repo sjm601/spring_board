@@ -52,7 +52,7 @@
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                 <th:block th:each="board : ${list}">
-                 <a th:text="${board.title}" class="dropdown-item" href="#" th:href="@{board/{id}(id=${board.boardId})}">자유게시판</a>
+                 <a th:text="${board.title}" class="dropdown-item" href="#" th:href="@{board/{id}/{page}(id=${board.boardId}, page=1)}">자유게시판</a>
                  </th:block>
               </div>
             </li>

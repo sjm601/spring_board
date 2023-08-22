@@ -1,76 +1,104 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-	<th:block th:replace="~{/layout/layoutV1 :: setContent(~{this :: content})}">
+<th:block
+	th:replace="~{/layout/layoutV1 :: setContent(~{this :: content})}">
 	<th:block th:fragment="content">
-	<!-- Page Content -->
-      <div class="container-fluid">
-      <div class="container-fluid form-inline">
-        <h2 class="mt-4" th:text="${board.title}+ ' 목록'">자유게시판 목록   </h2>
-           <a th:href="@{/board/{id}/register(id=${board.boardId})}" href="#">
-              <button type="button" class="btn btn-success mt-4">게시글 쓰기</button>
-            </a>
-  		
-     </div>
+		<!-- Page Content -->
+		<div class="container-fluid">
+			<div class="container-fluid form-inline">
+				<h2 class="mt-4" th:text="${board.title}+ ' 목록'">자유게시판 목록</h2>
+				<a th:href="@{/board/{id}/register(id=${board.boardId})}" href="#">
+					<button type="button" class="btn btn-success mt-4">게시글 쓰기</button>
+				</a>
 
-        <hr>
+			</div>
 
-        <form action="#" method="get" id="searchForm">
-          <div class="input-group">
-            <input type="hidden" name="page" value="1">
-            <div class="input-group-prepend">
-              <select class="custom-select" name="type">
-                <option selected>----- 검색유형 -----</option>
-                <option>제목</option>
-                <option>내용</option>
-                <option>작성자</option>
-                <option>제목 + 내용</option>
-                <option>제목 + 내용 + 작성자</option>
-              </select>
-            </div>
-            <input type="search" class="form-control" name="value">
-            <div class="input-group-append" id="button-addon4">
-              <button class="btn btn-success btn-search" type="button">검색</button>
-            </div>
-          </div>
-        </form>
+			<hr>
 
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th scope="col">번호</th>
-              <th scope="col">제목</th>
-              <th scope="col">작성자</th>
-              <th scope="col">조회수</th>
-              <th scope="col">등록일자</th>
-            </tr>
-          </thead>
+			<form action="#" method="get" id="searchForm">
+				<div class="input-group">
+					<input type="hidden" name="page" value="1">
+					<div class="input-group-prepend">
+						<select class="custom-select" name="type">
+							<option selected>----- 검색유형 -----</option>
+							<option>제목</option>
+							<option>내용</option>
+							<option>작성자</option>
+							<option>제목 + 내용</option>
+							<option>제목 + 내용 + 작성자</option>
+						</select>
+					</div>
+					<input type="search" class="form-control" name="value">
+					<div class="input-group-append" id="button-addon4">
+						<button class="btn btn-success btn-search" type="button">검색</button>
+					</div>
+				</div>
+			</form>
 
-          <tbody>
-            <tr th:each="article : ${articleList}">
-            <td th:text="${article.articleId}">번호</td>
-            <td>
-    <a th:text="${article.subject}" th:href="@{/board/{id}/read/{articleId}(id=${board.boardId},articleId=${article.articleId})}">제목</a>
-			</td>
-            <td th:text="${article.writer}">작성자</td>
-            <td th:text="${article.hitCount}">조회수</td>
-            <td th:text="${article.regdate}">등록일자</td>
-            </tr>
-          </tbody>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th scope="col">번호</th>
+						<th scope="col">제목</th>
+						<th scope="col">작성자</th>
+						<th scope="col">조회수</th>
+						<th scope="col">등록일자</th>
+					</tr>
+				</thead>
 
-        </table>
+				<tbody>
+					<tr th:each="article : ${articleList}">
+						<td th:text="${article.articleId}">번호</td>
+						<th:block th:if="${article.levelNo == 0}">
+							<td><a th:href="@{/article/{id}/read/{articleId}(id=${board.boardId}, articleId=${article.articleId})}" th:text="${article.subject}" href="">게시글 제목입니다.</a></td>
+						</th:block>
+						<th:block th:if="${article.levelNo > 0}">
+							<td><span><th:block th:each="i : ${#numbers.sequence(1, article.getLevelNo() * 2)}">&nbsp;&nbsp;</th:block></span><i class="fa-solid fa-arrow-turn-up fa-rotate-90" style="color: #6a1881;"></i>&nbsp;&nbsp;<i class="fa-brands fa-replyd fa-xl" style="color: #6a1881;"></i>&nbsp;&nbsp;<a th:href="@{/article/{id}/read/{articleId}(id=${board.boardId}, articleId=${article.articleId})}" th:text="${article.subject}" href="">게시글 제목입니다.</a></td>
+						</th:block>
+						<td th:text="${article.writer}">작성자</td>
+						<td th:text="${article.hitCount}">조회수</td>
+						<td th:text="${article.regdate}">등록일자</td>
+					</tr>
+				</tbody>
 
-        <ul class="pagination h-100 justify-content-center align-items-center">
+			</table>
 
-          <li class="page-item"><a th:if="${pagination.showFirst}" th:href="@{?page=1}" class="page-link">처음으로</a></li>
-          <li class="page-item"><a th:if="${pagination.showPrevious}" th:href="@{|?page=${pagination.previousStartPage}|}" class="page-link">이전목록</a></li>
-		<th:block th:each="i : ${#numbers.sequence(pagination.getStartPage(), pagination.getEndPage())}">
-          <li th:if="${i == pagination.params.requestPage}" class="page-item active"><a th:text="${i}" class="page-link" href="#">1</a></li>
-          <li th:unless="${i ==pagination.params.requestPage}" class="page-item"><a th:href="@{|?page=${i}|}" th:text="${i}" class="page-link" href="#">2</a></li>
-		</th:block>
-          <li class="page-item"><a th:if="${pagination.showNext}" th:href="@{|?page=${pagination.nextStartPage}|}"class="page-link">다음목록</a></li>
-          <li class="page-item"><a th:if="${pagination.showLast}" th:href="@{|?page=${pagination.totalPages}|}" class="page-link">끝으로</a></li>
-        </ul>
-      </div>
+			<ul
+				class="pagination h-100 justify-content-center align-items-center">
+				<th:block th:if="${pagination.showFirst}">
+					<li class="page-item"><a
+						th:href="@{/board/{id}/{page}(id=${board.boardId}, page=1)}"
+						class="page-link">처음으로</a></li>
+				</th:block>
+				<th:block th:if="${pagination.showPrevious}">
+					<li class="page-item"><a
+						th:href="@{/board/{id}/{page}(id=${board.boardId}, page=${pagination.previousStartPage})}"
+						class="page-link">이전목록</a></li>
+				</th:block>
+				<th:block
+					th:each="i : ${#numbers.sequence(pagination.getStartPage(), pagination.getEndPage())}">
+					<th:block th:if="${i == pagination.params.requestPage}">
+						<li class="page-item active"><a th:text="${i}"
+							class="page-link" href="#">1</a></li>
+					</th:block>
+					<th:block th:if="${i != pagination.params.requestPage}">
+						<li class="page-item"><a th:text="${i}"
+							th:href="@{/board/{id}/{page}(id=${board.boardId}, page=${i})}"
+							class="page-link" href="#">2</a></li>
+					</th:block>
+				</th:block>
+				<th:block th:if="${pagination.showNext}">
+					<li class="page-item"><a
+						th:href="@{/board/{id}/{page}(id=${board.boardId}, page=${pagination.nextStartPage})}"
+						class="page-link">다음목록</a></li>
+				</th:block>
+				<th:block th:if="${pagination.showLast}">
+					<li class="page-item"><a
+						th:href="@{/board/{id}/{page}(id=${board.boardId}, page=${pagination.totalPages})}"
+						class="page-link">끝으로</a></li>
+				</th:block>
+			</ul>
+		</div>
 	</th:block>
 </th:block>
 </html>

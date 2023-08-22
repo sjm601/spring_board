@@ -1,44 +1,58 @@
-<!DOCTYPE html>
+	<!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 	<th:block th:replace="~{/layout/layoutV1 :: setContent(~{this :: content})}">
 	<th:block th:fragment="content">
 
-
+	<div id="page-content-wrapper">
   <div class="container-fluid">
         <h1 class="mt-4">게시글 수정</h1>
         <hr>
-        <form th:action="@{/board/{id}/modify/{articleId}(id=${board.boardId}, articleId=${article.articleId})}" th:object="${article}" th:method="post">
+        <form th:action="@{/article/{id}/modify/{articleId}(id=${board.boardId}, articleId=${article.articleId})}" th:method="post">
             <div class="form-group">
                 <label>게시글 번호</label>
-                <input type="text" class="form-control" th:field="*{articleId}" readonly>
+                <input type="text" class="form-control" th:value="${article.articleId}" readonly>
             </div>
 
             <div class="form-group">
                 <label>제목</label>
-                <input type="text" class="form-control" th:field="*{subject}">
+                <input type="text" class="form-control" th:value="${article.subject}" name="subject">
             </div>
             <div class="form-group">
                 <label>내용</label>
-                <textarea class="form-control" th:field="*{content}" rows="5"></textarea>
+                <textarea class="form-control" th:text="${article.content}" name="content" rows="5"></textarea>
             </div>
             <div class="form-group">
                 <label>작성자</label>
-                <input type="text" class="form-control" th:field="*{writer}" readonly>
+                <input type="text" class="form-control" th:value="${article.writer}" name="writer" readonly>
             </div>
             <div class="form-group">
                 <label>등록일자</label>
-                <input type="text" class="form-control" th:field="*{regdate}" readonly>
+                <input type="text" class="form-control" th:value="${article.regdate}" name="regDate" readonly>
             </div>
             <div class="form-group">
-                <label>비밀번호</label>
-                <input type="text" class="form-control" th:field="*{passwd}">
-            </div>
+						<label>비밀번호</label> <input type="password" class="form-control"
+							name="passwd" placeholder="Enter Password">
+			</div>
 
             <button type="submit" class="btn btn-primary">수정</button>
-            <a href="#" class="btn btn-info">목록</a>
+            <button type="button" class="btn btn-danger" id="delete">삭제</button>
+					<a
+						th:href="@{/article/{id}/read/{articleId}(id=${board.boardId}, articleId=${article.articleId})}"
+						href="#">
+						<button type="button" class="btn btn-info">취소</button>
+					</a>
         </form>
     </div>
-      
+    </div>
+      <!-- /#page-content-wrapper -->
+		<script th:inline="javascript">
+		document.querySelector("#delete").addEventListener('click', function() {
+			const form = document.querySelector('form');
+			const url = /*[[@{/article/{id}/delete/{articleId}(id=${board.boardId}, articleId=${article.articleId})}]]*/
+			form.action = url;
+			form.submit();
+		});
+		</script>
   	</th:block>
 </th:block>
 

@@ -6,7 +6,7 @@
       <div class="container-fluid">
         <h1 class="mt-4">게시글 쓰기</h1>
         <hr>
-        <form action="#" th:action="@{/register/{id}(id=${board.boardId})}" th:method="post">
+        <form action="#" th:action="@{/article/{id}(id=${board.boardId})}" th:method="post">
           <div class="form-group">
             <label>제목</label>
             <input type="text" class="form-control" name="subject" placeholder="Enter Title">
@@ -24,7 +24,8 @@
             <input type="text" class="form-control" name="passwd" placeholder="Enter passwd">
           </div>
 
-          <button type="submit" class="btn btn-success">Submit</button>
+          <button th:text="등록" type="submit" class="btn btn-success">등록</button>
+          <a th:href="@{/board/{id}/{page}(id=${board.boardId}, page=1)}" href="#" th:text="취소" class="btn btn-warning"></a>
         </form>
       </div>
 

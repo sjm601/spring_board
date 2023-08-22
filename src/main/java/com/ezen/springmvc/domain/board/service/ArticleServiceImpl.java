@@ -50,8 +50,8 @@ public class ArticleServiceImpl implements ArticleService{
 
 	@Override
 	@Transactional
-	public void createReply(ArticleDTO articleDTO, int articleId) {
-		articleMapper.createReply(articleDTO, articleId);
+	public void createReply(ArticleDTO articleDTO, ArticleDTO topArticle) {
+		articleMapper.createReply(articleDTO, topArticle);
 		
 	}
 
@@ -69,23 +69,28 @@ public class ArticleServiceImpl implements ArticleService{
 
 	@Override
 	@Transactional
-	public void update(ArticleDTO articleDTO, int updateArticleId) {
-		articleMapper.update(articleDTO, updateArticleId);
+	public void update(ArticleDTO articleDTO) {
+		articleMapper.update(articleDTO);
+	}
+
+
+	@Override
+	@Transactional
+	public void delete(int deleteArticleId) {
+		articleMapper.delete(deleteArticleId);
 		
 	}
 
 	@Override
 	@Transactional
-	public void delete(int deleteArticleId, String loginId, String passwd) {
-		articleMapper.delete(deleteArticleId, loginId, passwd);
+	public void createNestedReply(ArticleDTO articleDTO, ArticleDTO topArticle) {
+		articleMapper.createNestedReply(articleDTO, topArticle);
 		
 	}
 
 	@Override
-	@Transactional
-	public void createNestedReply(ArticleDTO articleDTO, int articleId) {
-		articleMapper.createNestedReply(articleDTO, articleId);
-		
+	public ArticleDTO find(int articleId) {
+		return articleMapper.find(articleId);
 	}
 	
 }
