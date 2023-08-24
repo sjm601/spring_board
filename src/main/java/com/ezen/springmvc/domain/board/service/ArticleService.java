@@ -36,5 +36,5 @@ public interface ArticleService {
 
 	public void update(ArticleDTO articleDto);
 
-	public void delete(int deleteArticleId);
+	public void delete(ArticleDTO articleDTO);
 }

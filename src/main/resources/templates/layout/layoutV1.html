@@ -1,81 +1,112 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="setContent(content)">
-<head>
+	<head>
 <meta charset="utf-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>다중 게시판 실습용 웹 디자인</title>
 <!-- Bootstrap core CSS -->
-<link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}"
+	href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<!-- google icon CDN -->
+<link
+	th:href="@{https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0}"
+	rel="stylesheet"
+	href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 <!-- Custom styles for this template -->
-<link th:href="@{/css/simple-sidebar.css}" href="css/simple-sidebar.css" rel="stylesheet">
-</head>
+<link th:href="@{/css/simple-sidebar.css}" href="css/simple-sidebar.css"
+	rel="stylesheet">
+<link th:href="@{/css/common.css}" href="css/common.css"
+	rel="stylesheet">
+	</head>
 
-<body>
-	<div class="d-flex" id="wrapper">
+	<body>
+		<div class="d-flex" id="wrapper">
 
-		<!-- Sidebar -->
-		<div class="bg-light border-right" id="sidebar-wrapper">
-			<div class="sidebar-heading">Full Stack Developer</div>
-			<div class="list-group list-group-flush">
-				<a href="#" class="list-group-item list-group-item-action bg-light">Profile</a>
-				<a href="#" class="list-group-item list-group-item-action bg-light">Favorites</a>
+			<!-- Sidebar -->
+			<div class="bg-light border-right" id="sidebar-wrapper">
+				<div class="sidebar-heading">Full Stack Developer</div>
+				<div class="list-group list-group-flush">
+					<a href="#" th:if="${session.loginMember} != null"
+						th:href="@{/member/{id}(id=${session.loginMember.id})}"
+						class="list-group-item list-group-item-action bg-light">프로필</a> <a
+						href="#" th:href="@{/member}"
+						class="list-group-item list-group-item-action bg-light">회원목록</a>
+				</div>
 			</div>
+			<!-- /#sidebar-wrapper -->
+
+
+			<!-- Page Content -->
+			<div id="page-content-wrapper">
+				<nav
+					class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+					<button class="btn btn-primary" id="menu-toggle">Toggle</button>
+
+					<button class="navbar-toggler" type="button" data-toggle="collapse"
+						data-target="#navbarSupportedContent"
+						aria-controls="navbarSupportedContent" aria-expanded="false"
+						aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+							<li class="nav-item active"><a class="nav-link" href="">홈
+									<span class="sr-only">(current)</span>
+							</a></li>
+							<li class="nav-item"><a class="nav-link" href="#">메뉴1</a></li>
+							<li class="nav-item"><a class="nav-link" href="#">메뉴2</a></li>
+							<li class="nav-item dropdown"><a
+								class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+								role="button" data-toggle="dropdown" aria-haspopup="true"
+								aria-expanded="false"> 게시판 </a>
+								<div class="dropdown-menu dropdown-menu-right"
+									aria-labelledby="navbarDropdown">
+									<th:block th:each="board : ${list}">
+										<a th:text="${board.title}" class="dropdown-item" href="#"
+											th:href="@{/board/{id}/{page}(id=${board.boardId}, page=1)}">자유게시판</a>
+									</th:block>
+								</div></li>
+
+							<li class="nav-item"><a
+								th:if="${session.loginMember} == null"
+								class="btn btn-outline-danger" th:href="@{/member/login}">로그인</a>
+							<li class="nav-item"><a
+								th:if="${session.loginMember} != null"
+								th:href="@{/member/{id}(id=${session.loginMember.id})}"
+								class="btn btn-outline-danger"
+								th:text="|${session.loginMember.name}님 즐거운 하루 되세요|">${session.loginMember.name}님
+									즐거운 하루 되세요</a></li>
+							<li class="nav-item"><a
+								th:if="${session.loginMember} == null" class="nav-link" href="#"
+								th:href="@{/member/register}">회원가입</a></li>
+							<li class="nav-item"><a
+								th:if="${session.loginMember} != null" class="nav-link" href="#"
+								th:href="@{/member/logout}">로그아웃</a></li>
+						</ul>
+					</div>
+				</nav>
+				<th:block th:replace="${content}"></th:block>
+			</div>
+			<!-- /#page-content-wrapper -->
 		</div>
-		<!-- /#sidebar-wrapper -->
-				
-		
-		<!-- Page Content -->
-		<div id="page-content-wrapper">
-		<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-        <button class="btn btn-primary" id="menu-toggle">Toggle</button>
+		<!-- /#wrapper -->
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+		<!-- Bootstrap core JavaScript -->
+		<script th:src="@{/vendor/jquery/jquery.min.js}"
+			src="vendor/jquery/jquery.min.js"></script>
+		<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"
+			src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">홈 <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">메뉴1</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">메뉴2</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                게시판
-              </a>
-              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                <th:block th:each="board : ${list}">
-                 <a th:text="${board.title}" class="dropdown-item" href="#" th:href="@{board/{id}/{page}(id=${board.boardId}, page=1)}">자유게시판</a>
-                 </th:block>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </nav>
-			<th:block th:replace="${content}"></th:block>
-		</div>
-		<!-- /#page-content-wrapper -->
-	</div>
-	<!-- /#wrapper -->
-
-	<!-- Bootstrap core JavaScript -->
-	<script th:src="@{/vendor/jquery/jquery.min.js}" src="vendor/jquery/jquery.min.js"></script>
-	<script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}" src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-	<!-- Menu Toggle Script -->
-	<script>
-		$("#menu-toggle").click(function(e) {
-			e.preventDefault();
-			$("#wrapper").toggleClass("toggled");
-		});
-	</script>
-	</th:block>
+		<!-- Menu Toggle Script -->
+		<script>
+			$("#menu-toggle").click(function(e) {
+				e.preventDefault();
+				$("#wrapper").toggleClass("toggled");
+			});
+		</script>
+</th:block>
 </body>
 </html>

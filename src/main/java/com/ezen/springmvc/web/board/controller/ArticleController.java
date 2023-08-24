@@ -134,7 +134,7 @@ public class ArticleController {
 		String passwd =article.getPasswd();
 		String inputPasswd = articleDTO.getPasswd();
 		if (passwd.equals(inputPasswd)) {
-			articleService.delete(articleId);
+			articleService.delete(article);
 			return "redirect:/board/{id}/1";
 		} else {
 			return "board/error";
@@ -172,4 +172,5 @@ public class ArticleController {
 		
 		return "redirect:/board/{id}/1";
 	}
+	
 }

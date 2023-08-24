@@ -99,7 +99,7 @@ public class ArticleMapperTest {
 										.groupNo(topArticle.getGroupNo())
 										.levelNo(topArticle.getLevelNo())
 										.build();
-		articleMapper.createReply(newReply, topArticle.getArticleId());
+		articleMapper.createReply(newReply, topArticle);
 		log.info("댓글 등록 완료 : {}", topArticle);
 	}
 	
@@ -121,7 +121,7 @@ public class ArticleMapperTest {
 											   .groupNo(topArticle.getGroupNo())
 											   .levelNo(topArticle.getLevelNo())
 											   .build();
-		articleMapper.createNestedReply(newNewstedReply, topArticle.getArticleId());
+		articleMapper.createNestedReply(newNewstedReply, topArticle);
 		log.info("대댓글 등록 완료 : {}", newNewstedReply);
 	}
 	
@@ -141,7 +141,7 @@ public class ArticleMapperTest {
 	@DisplayName("게시글 업데이트")
 	@Disabled
 	public void updateTest() {
-		int updateArticleId = 1;
+	
 		// 업데이트 게시물 생성
 		ArticleDTO updateArticle = ArticleDTO.builder()
 //											 .boardId(20)
@@ -149,7 +149,7 @@ public class ArticleMapperTest {
 //											 .content("내용 수정 1")
 											 .passwd("1111")
 											 .build();
-		articleMapper.update(updateArticle, updateArticleId);
+		articleMapper.update(updateArticle);
 		log.info("게시글 수정 완료 : {}", updateArticle);
 	}
 	
@@ -158,11 +158,9 @@ public class ArticleMapperTest {
 	//@Disabled
 	public void deleteTest() {
 		int deleteArticleId = 17;
-		String loginId = "thursday";
-		String passwd = "1111";
 		// 삭제할 게시글 검색
 		ArticleDTO deleteArticle = articleMapper.findArticle(deleteArticleId);
-		articleMapper.delete(deleteArticleId, loginId, passwd);
+		articleMapper.delete(deleteArticle);
 		log.info("게시글 삭제 완료 : {}", deleteArticle);
 	}
 	

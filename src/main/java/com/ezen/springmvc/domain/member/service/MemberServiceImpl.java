@@ -10,10 +10,10 @@ import com.ezen.springmvc.domain.member.mapper.MemberMapper;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService {
-		
+@Service
+public class MemberServiceImpl implements MemberService{
+	
 	private final MemberMapper memberMapper;
 	
 	@Override
@@ -21,7 +21,6 @@ public class MemberServiceImpl implements MemberService {
 	public void register(Member member) {
 		memberMapper.create(member);
 	}
-	
 
 	@Override
 	public Member isMember(String id, String passwd) {
@@ -37,5 +36,11 @@ public class MemberServiceImpl implements MemberService {
 	public Member getMember(String id) {
 		return memberMapper.findById(id);
 	}
-	
+
+	@Override
+	@Transactional
+	public void editMember(Member member) {
+		memberMapper.update(member);
+	}
+
 }

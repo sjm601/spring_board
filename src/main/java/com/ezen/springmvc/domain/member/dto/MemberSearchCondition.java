@@ -7,20 +7,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-/**
- * 회원 조회 시 상세 검색 조건에 따른 DTO 클래스
- * @author 박상훈
- *
- */
-@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
+@ToString
 @Builder
-@NoArgsConstructor
 public class MemberSearchCondition {
 	private String memberId;
 	private String name;
 	private String email;
-	
 }

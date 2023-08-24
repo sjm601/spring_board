@@ -35,7 +35,6 @@
 			article_id,
 			board_id,
 			writer,
-			regdate,
 			subject,
 			content,
 			passwd,
@@ -167,35 +166,6 @@
              	article_id = #{topArticle.articleId}))
 	</insert>
 	
-	<!-- 대댓글 등록 -->
-	<insert id="createNestedReply" parameterType="object">
-		INSERT INTO article (
-			article_id,
-			board_id,
-			writer,
-			subject,
-			content,
-			passwd,
-			group_no,
-			level_no,
-			order_no)
-		VALUES (
-			article_id_seq.NEXTVAL,
-			#{articleDTO.boardId},
-			#{articleDTO.writer},
-			#{articleDTO.subject},
-			#{articleDTO.content},
-			#{articleDTO.passwd},
-			#{articleDTO.groupNo},
-			#{articleDTO.levelNo} + 1,
-			(SELECT
-				order_no + 1
-             FROM
-             	article
-             WHERE
-             	article_id = #{topArticleId}))
-	</insert>
-	
 	<!-- 게시글 상세보기 시 조회수 갱신 -->
 	<update id="updateHitCount">
 		UPDATE
@@ -238,11 +208,12 @@
 	</update>
 	
 	<!-- 게시글 삭제 -->
-	<delete id="delete" parameterType="int">
+	<delete id="delete" parameterType="ArticleDTO">
 		DELETE
 		FROM
 			article
 		WHERE
-			article_id = #{deleteArticleId}
+			group_no = #{groupNo} AND
+			level_no >= #{levelNo}
 	</delete>
 </mapper>

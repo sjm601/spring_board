@@ -42,8 +42,8 @@ public class ArticleServiceTest {
 	@DisplayName("페이징 계산(검색값 포함)에 필요한 게시글 전체 갯수")
 	//@Disabled
 	public void getCountAllTest() {
-		int boardId = 10;
-		String keyword = "아스날";
+		int boardId = 50;
+		String keyword = "사카";
 		int count = articleService.getCountAll(boardId, keyword);
 		log.info("게시글 전체 갯수 : {}", count);
 	}
@@ -95,7 +95,7 @@ public class ArticleServiceTest {
 										.groupNo(topArticle.getGroupNo())
 										.levelNo(topArticle.getLevelNo())
 										.build();
-		articleService.createReply(newReply, topArticle.getArticleId());
+		articleService.createReply(newReply, topArticle);
 		log.info("댓글 등록 완료 : {}", topArticle);
 	}
 	
@@ -117,7 +117,7 @@ public class ArticleServiceTest {
 											   .groupNo(topArticle.getGroupNo())
 											   .levelNo(topArticle.getLevelNo())
 											   .build();
-		articleService.createNestedReply(newNewstedReply, topArticle.getArticleId());
+		articleService.createNestedReply(newNewstedReply, topArticle);
 		log.info("대댓글 등록 완료 : {}", newNewstedReply);
 	}
 	
@@ -135,9 +135,9 @@ public class ArticleServiceTest {
 	
 	@Test
 	@DisplayName("게시글 업데이트")
-	//@Disabled
+	@Disabled
 	public void updateTest() {
-		int updateArticleId = 54;
+		
 		// 업데이트 게시물 생성
 		ArticleDTO updateArticle = ArticleDTO.builder()
 //											 .boardId(20)
@@ -145,7 +145,7 @@ public class ArticleServiceTest {
 //											 .content("내용 수정 1")
 					//						 .passwd("1234")
 											 .build();
-		articleService.update(updateArticle, updateArticleId);
+		articleService.update(updateArticle);
 		log.info("게시글 수정 완료 : {}", updateArticle);
 	}
 	
@@ -154,11 +154,9 @@ public class ArticleServiceTest {
 	@Disabled
 	public void deleteTest() {
 		int deleteArticleId = 17;
-		String loginId = "thursday";
-		String passwd = "1111";
 		// 삭제할 게시글 검색
 		ArticleDTO deleteArticle = articleService.findArticle(deleteArticleId);
-		articleService.delete(deleteArticleId, loginId, passwd);
+		articleService.delete(deleteArticle);
 		log.info("게시글 삭제 완료 : {}", deleteArticle);
 	}
 	

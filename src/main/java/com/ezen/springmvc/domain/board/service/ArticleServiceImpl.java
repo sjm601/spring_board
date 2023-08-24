@@ -76,8 +76,8 @@ public class ArticleServiceImpl implements ArticleService{
 
 	@Override
 	@Transactional
-	public void delete(int deleteArticleId) {
-		articleMapper.delete(deleteArticleId);
+	public void delete(ArticleDTO articleDTO) {
+		articleMapper.delete(articleDTO);
 		
 	}
 

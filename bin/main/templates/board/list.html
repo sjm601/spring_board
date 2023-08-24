@@ -15,22 +15,14 @@
 
 			<hr>
 
-			<form action="#" method="get" id="searchForm">
-				<div class="input-group">
-					<input type="hidden" name="page" value="1">
-					<div class="input-group-prepend">
-						<select class="custom-select" name="type">
-							<option selected>----- 검색유형 -----</option>
-							<option>제목</option>
-							<option>내용</option>
-							<option>작성자</option>
-							<option>제목 + 내용</option>
-							<option>제목 + 내용 + 작성자</option>
-						</select>
-					</div>
-					<input type="search" class="form-control" name="value">
+			<form th:action="@{/board/{id}/{page}(id=${board.boardId}, page=1)}" class="d-flex justify-content-end m-4"
+				action="#" method="get" id="searchForm">
+				<div class="input-group w-25">
+					<input type="hidden" name="page" value="1"> <input
+						type="search" class="form-control rounded-start" name="keyword"
+						placeholder="제목 또는 내용 또는 작성자">
 					<div class="input-group-append" id="button-addon4">
-						<button class="btn btn-success btn-search" type="button">검색</button>
+						<button class="btn btn-success btn-search" type="submit">검색</button>
 					</div>
 				</div>
 			</form>
@@ -50,10 +42,24 @@
 					<tr th:each="article : ${articleList}">
 						<td th:text="${article.articleId}">번호</td>
 						<th:block th:if="${article.levelNo == 0}">
-							<td><a th:href="@{/article/{id}/read/{articleId}(id=${board.boardId}, articleId=${article.articleId})}" th:text="${article.subject}" href="">게시글 제목입니다.</a></td>
+							<td><a
+								th:href="@{/article/{id}/read/{articleId}(id=${board.boardId}, articleId=${article.articleId})}"
+								th:text="${article.subject}" href="">게시글 제목입니다.</a></td>
 						</th:block>
 						<th:block th:if="${article.levelNo > 0}">
-							<td><span><th:block th:each="i : ${#numbers.sequence(1, article.getLevelNo() * 2)}">&nbsp;&nbsp;</th:block></span><i class="fa-solid fa-arrow-turn-up fa-rotate-90" style="color: #6a1881;"></i>&nbsp;&nbsp;<i class="fa-brands fa-replyd fa-xl" style="color: #6a1881;"></i>&nbsp;&nbsp;<a th:href="@{/article/{id}/read/{articleId}(id=${board.boardId}, articleId=${article.articleId})}" th:text="${article.subject}" href="">게시글 제목입니다.</a></td>
+							<!-- /* <td><span><th:block th:each="i : ${#numbers.sequence(1, article.getLevelNo() * 2)}">&nbsp;&nbsp;</th:block>
+							</span><i class="fa-solid fa-arrow-turn-up fa-rotate-90" style="color: #6a1881;">
+							</i>&nbsp;&nbsp;<i class="fa-brands fa-replyd fa-xl" style="color: #6a1881;">
+							</i>&nbsp;&nbsp;<a th:href="@{/article/{id}/read/{articleId}(id=${board.boardId}, articleId=${article.articleId})}" 
+							th:text="${article.subject}" href="">
+							게시글 제목입니다.</a></td>*/-->
+							<td><span
+								th:styleappend="${'margin-left:' + (article.levelNo * 20) + 'px !important;'}"
+								class="material-symbols-outlined" style="color: #ff0000;">
+									subdirectory_arrow_right </span> &nbsp;&nbsp;<span
+								class="material-symbols-outlined" style="color: #ff0000;"> comment </span>&nbsp;&nbsp;<a
+								th:href="@{/article/{id}/read/{articleId}(id=${board.boardId}, articleId=${article.articleId})}"
+								th:text="${article.subject}" href="">게시글 제목입니다.</a></td>
 						</th:block>
 						<td th:text="${article.writer}">작성자</td>
 						<td th:text="${article.hitCount}">조회수</td>
@@ -65,6 +71,7 @@
 
 			<ul
 				class="pagination h-100 justify-content-center align-items-center">
+
 				<th:block th:if="${pagination.showFirst}">
 					<li class="page-item"><a
 						th:href="@{/board/{id}/{page}(id=${board.boardId}, page=1)}"

@@ -49,5 +49,5 @@ public interface ArticleMapper {
 	public void update(ArticleDTO articleDTO);
 	
 	/** 게시글 삭제 */
-	public void delete(int deleteArticleId);
+	public void delete(ArticleDTO articleDTO);
 }
