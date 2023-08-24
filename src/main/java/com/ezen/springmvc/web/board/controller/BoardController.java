@@ -32,62 +32,35 @@ public class BoardController {
 	private static final int PAGE_SIZE = 5;
 
 	// 게시판 화면
-		@GetMapping("/{id}/{page}")
-		public String boardList(@PathVariable int id, @PathVariable String page, Model model) {
-			BoardDTO board = boardService.findByBoardId(id);
-			model.addAttribute("board", board);
-			List<BoardDTO> list = boardService.getBoardList();
-			model.addAttribute("list", list);
-			int count = articleService.getCountAll(id, null);
-			if (page == null || page.equals("")) {
-				page = "1";
-			}
-			int selectPage = Integer.parseInt(page);
-			PageParams pageParams = PageParams.builder()
-											  .elementSize(ELEMENT_SIZE)
-											  .pageSize(PAGE_SIZE)
-											  .requestPage(selectPage)
-											  .rowCount(count)
-											  .boardId(id)
-											  .keyword(null)
-											  .build();
-			Pagination pagination = new Pagination(pageParams);
-			model.addAttribute(pagination);
-			List<ArticleDTO> articleList = articleService.findByAll(pageParams);
-			model.addAttribute("articleList", articleList);
-			return "board/list";
-		}
-
+	@GetMapping("/{id}")
+	public String boardList(@PathVariable int id, @PathParam("page") String page, @PathParam("keyword") String keyword, Model model) {
+		BoardDTO board = boardService.read(id);
+		model.addAttribute("board", board);
+		List<BoardDTO> list = boardService.findAll();
+		model.addAttribute("list", list);
 		
-		// 게시판 화면 요청 (키워드 포함)
-		@GetMapping(path = "/{id}/{page}", params = "keyword")
-		public String searchBoardList(@PathVariable int id, @PathVariable String page,
-		                              @RequestParam("keyword") String keyword, Model model) {
-		    BoardDTO board = boardService.findByBoardId(id);
-		    model.addAttribute("board", board);
-
-		    int count = articleService.getCountAll(id, keyword);
-
-		    if (page == null || page.equals("")) {
-		        page = "1";
-		    }
-		    int selectPage = Integer.parseInt(page);
-		    PageParams pageParams = PageParams.builder()
-		            .elementSize(ELEMENT_SIZE)
-		            .pageSize(PAGE_SIZE)
-		            .requestPage(selectPage)
-		            .rowCount(count)
-		            .boardId(id)
-		            .keyword(keyword)
-		            .build();
-		    Pagination pagination = new Pagination(pageParams);
-		    model.addAttribute("pagination", pagination);
-
-		    List<ArticleDTO> articleList = articleService.findByAll(pageParams);
-		    model.addAttribute("articleList", articleList);
-
-		    return "board/list";
+		int count = articleService.getCountAll(id, keyword);
+		// log.info("리스트 : {}", count);
+		if (page == null || page.equals("")) {
+			page = "1";
 		}
+		
+		int selectPage = Integer.parseInt(page);
+		PageParams pageParams = PageParams.builder()
+										  .elementSize(ELEMENT_SIZE)
+										  .pageSize(PAGE_SIZE)
+										  .requestPage(selectPage)
+										  .rowCount(count)
+										  .boardId(id)
+										  .keyword(keyword)
+										  .build();
+		Pagination pagination = new Pagination(pageParams);
+		model.addAttribute(pagination);
+		List<ArticleDTO> articleList = articleService.findByAll(pageParams);
+		// log.info(articleList.toString());
+		model.addAttribute("articleList", articleList);
+		return "board/list";
+	}
 		
 	// 게시물 쓰기 화면 요청
 	@GetMapping("/{id}/register")

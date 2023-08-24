@@ -18,7 +18,7 @@
 			<form th:action="@{/board/{id}/{page}(id=${board.boardId}, page=1)}" class="d-flex justify-content-end m-4"
 				action="#" method="get" id="searchForm">
 				<div class="input-group w-25">
-					<input type="hidden" name="page" value="1"> <input
+					<input th:value="${pagination.params.keyword} ?: ''" type="hidden" name="page" value="1"> <input
 						type="search" class="form-control rounded-start" name="keyword"
 						placeholder="제목 또는 내용 또는 작성자">
 					<div class="input-group-append" id="button-addon4">
